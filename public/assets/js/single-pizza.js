@@ -20,7 +20,7 @@ function getPizza() {
 
       // check for 4xx or 5xx error 
       if(!response.ok)
-        throw new Error({ message: 'Something went wrong!' });
+        throw new Error('Something went wrong!');
 
       //console.log(response);
       return response.json();
@@ -111,6 +111,25 @@ function handleNewCommentSubmit(event) {
   }
 
   const formData = { commentBody, writtenBy };
+
+  fetch(`/api/comments/${pizzaId}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json', 
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if(!response.ok) 
+        throw new Error('Something went wrong!');
+      response.json();
+    })
+    .then(commentRes => {
+      console.log(commentRes);
+      location.reload();
+    })
+    .catch(err => console.log(err));
 }
 
 function handleNewReplySubmit(event) {
