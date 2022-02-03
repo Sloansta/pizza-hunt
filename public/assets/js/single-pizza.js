@@ -100,6 +100,7 @@ function printReply(reply) {
 `;
 }
 
+// this function handles a new comment being submitted
 function handleNewCommentSubmit(event) {
   event.preventDefault();
 
@@ -132,6 +133,8 @@ function handleNewCommentSubmit(event) {
     .catch(err => console.log(err));
 }
 
+// this function handles a reply to a comment 
+
 function handleNewReplySubmit(event) {
   event.preventDefault();
 
@@ -149,6 +152,25 @@ function handleNewReplySubmit(event) {
   }
 
   const formData = { writtenBy, replyBody };
+
+  fetch(`/api/comments/${pizzaId}/${commentId}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if(!response.ok)
+        throw new Error('Something went wrong!');
+      response.json();
+    })
+    .then(replyRes => {
+      console.log(replyRes);
+      location.reload();
+    })
+    .catch(err => console.log(err));
 }
 
 $backBtn.addEventListener('click', function() {
